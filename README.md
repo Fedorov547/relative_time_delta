@@ -23,3 +23,10 @@ The trade-off is scope: only three forms are supported ("nth <Day>", "last <Day>
 - "last <Day>" on a day of the same weekday returns the previous week, not the current day. This matches the common reading that "last" implies a completed occurrence.
 - For "last <Day> of <Month>", if the named month is earlier in the year than the base month, the library assumes the following year's occurrence. Pass a base in the correct year if you need otherwise.
 - The result is always a datetime at midnight. Hours and minutes from the base are discarded.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
